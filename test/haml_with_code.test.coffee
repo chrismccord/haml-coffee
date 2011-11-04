@@ -11,18 +11,18 @@ module.exports =
 
     haml.getOpener().should.eql('o.push "<fooooooo foo=\\"headline\\" bar=\\"doo\\" baz=\\"doo\\" data-tags=\\"test,123,foo\\" test=\'\\"one, two\\"\'>#{"123#{456}"}"')
     haml.getCloser().should.eql('o.push "</fooooooo>"')
-    
+
     return
 
-  'Test haml with attributes and assigning an expression "%h1= "123""': ->
+  'Test haml with assigning an expression "%h1= "123""': ->
     haml = new Haml("%h1= \"123\"", 0, 0, false)
 
     haml.getOpener().should.eql('o.push "<h1>#{"123"}"')
     haml.getCloser().should.eql('o.push "</h1>"')
 
     return
-    
-  'Test haml with attributes and assigning an expression "%h1= "123"" and html escaping': ->
+
+  'Test haml with assigning an expression "%h1= "123"" and html escaping': ->
     haml = new Haml("%h1= \"123\"", 0, 0, true)
 
     haml.getOpener().should.eql('o.push "<h1>#{e "123"}"')
@@ -30,38 +30,38 @@ module.exports =
 
     return
 
-  'Test haml with attributes and assigning an expression "%h1= @project.get(\'title\')"': ->
+  'Test haml with assigning an expression "%h1= @project.get(\'title\')"': ->
     haml = new Haml("%h1= @project.get('title')", 0, 0, false)
-    
+
     haml.getOpener().should.eql('o.push "<h1>#{@project.get(\'title\')}"')
     haml.getCloser().should.eql('o.push "</h1>"')
-    
+
     return
 
-  'Test haml with attributes and assigning an expression "%h1= @project.get(\'title\')" and html escaping': ->
+  'Test haml with assigning an expression "%h1= @project.get(\'title\')" and html escaping': ->
     haml = new Haml("%h1= @project.get('title')", 0, 0, true)
-    
+
     haml.getOpener().should.eql('o.push "<h1>#{e @project.get(\'title\')}"')
     haml.getCloser().should.eql('o.push "</h1>"')
-    
+
     return
-    
-  'Test haml with attributes and assigning an expression ""': ->
+
+  'Test haml with assigning an expression ""': ->
     haml = new Haml("%h1= \"\#{@project.get('title')} no strings attached\"", 0, 0, false)
-    
+
     haml.getOpener().should.eql('o.push "<h1>#{"\#{@project.get(\'title\')} no strings attached"}"')
     haml.getCloser().should.eql('o.push "</h1>"')
-    
+
     return
-  
-  'Test haml with attributes and assigning an expression "" and html escaping': ->
+
+  'Test haml with assigning an expression "" and html escaping': ->
     haml = new Haml("%h1= \"\#{@project.get('title')} no strings attached\"", 0, 0, true)
-    
+
     haml.getOpener().should.eql('o.push "<h1>#{e "\#{@project.get(\'title\')} no strings attached"}"')
     haml.getCloser().should.eql('o.push "</h1>"')
-    
+
     return
-  
+
   'Test code with html escaping': ->
     code = new Code('= "abc"', 0, 0, true)
 
@@ -69,7 +69,7 @@ module.exports =
     code.getCloser().should.eql('')
 
     return
-  
+
   'Test code without html escaping': ->
     code = new Code('= "abc"', 0, 0, false)
 
@@ -77,7 +77,7 @@ module.exports =
     code.getCloser().should.eql('')
 
     return
-    
+
   'Test code with unescaping': ->
     code = new Code('!= "abc"', 0, 0, true)
 
@@ -85,4 +85,3 @@ module.exports =
     code.getCloser().should.eql('')
 
     return
-  
