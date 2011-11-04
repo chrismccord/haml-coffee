@@ -70,6 +70,14 @@ module.exports =
 
     return
 
+  'Test haml with code variable "category" and "title" as attributes': ->
+    haml = new Haml("%a{ :class => category, :title => title }", 0, 0, true)
+
+    haml.getOpener().should.eql('o.push "<a class=\\"#{category}\\" title=\\"#{title}\\">"')
+    haml.getCloser().should.eql('o.push "</a>"')
+
+    return
+
   'Test haml with code function "category()" as attribute': ->
     haml = new Haml("%a{ :class => category() }", 0, 0, true)
 

@@ -93,6 +93,7 @@ module.exports = class Haml extends Node
       key    = result[1] if result
       value  = pair[1].trim()
       valueIsLiteral = value.match(/^("|').*\1$/)
+      value  = value.replace(/,$/, '')
       pairs.push
         key: key
         value: if valueIsLiteral then value else '"#{' + value + '}"'
