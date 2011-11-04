@@ -6,16 +6,16 @@ qe     = require('../helper').escape
 # Html Node
 module.exports = class Haml extends Node
   @selfCloseTags: ["meta", "img", "link", "br", "hr", "input", "area", "base"]
-  
+
   constructor: (expression, block_level, code_block_level, @escape_html) ->
     super expression, block_level, code_block_level
-  
+
   evaluate: ->
     parsedExpression = @parseExpression(@expression)
     htmlTagPrefix    = @buildHtmlTag(parsedExpression)
 
     if @isSelfClosing(parsedExpression.tag)
-      @opener = "#{@cw}o.push \"#{@hw}#{qe(htmlTagPrefix)}>" 
+      @opener = "#{@cw}o.push \"#{@hw}#{qe(htmlTagPrefix)}>"
       @closer = "#{@cw}o.push \"#{@hw}</#{parsedExpression.tag}>\""
     else
       @opener = "#{@cw}o.push \"#{@hw}#{qe(htmlTagPrefix)} />"
@@ -26,7 +26,7 @@ module.exports = class Haml extends Node
           "\#{e #{parsedExpression.assignment}}"
         else
           "\#{#{parsedExpression.assignment}}"
-        
+
     @opener += '"'
 
   parseExpression: (exp) ->
@@ -39,7 +39,7 @@ module.exports = class Haml extends Node
       classes:    tagProperties.classes
       pairs:      optionProperties.pairs
       assignment: optionProperties.assignment)
-  
+
   buildHtmlTag: (parsedExpression) ->
     tagParts = ["<#{parsedExpression.tag}"]
 
@@ -50,10 +50,10 @@ module.exports = class Haml extends Node
     if parsedExpression.pairs.length > 0
       (tagParts.push "#{pair.key}=#{pair.value}" for pair in parsedExpression.pairs)
     return tagParts.join(' ')
-  
+
   parseTag: (exp) ->
     try
-      tagExp = exp.match(/^((?:[.#%][a-z_\-][a-z0-9_:\-]*)+)(.*)$/i)[1]      
+      tagExp = exp.match(/^((?:[.#%][a-z_\-][a-z0-9_:\-]*)+)(.*)$/i)[1]
       tag     = tagExp.match(/\%([a-z_\-][a-z0-9_:\-]*)/i)
       tag     = if tag then tag[1] else 'div'
       ids     = tagExp.match(/\#([a-z_\-][a-z0-9_\-]*)/gi )
@@ -64,7 +64,7 @@ module.exports = class Haml extends Node
         classes: (klass.substr(1) for klass in classes) if classes)
     catch error
       throw "Unable to parse tag from #{exp}: #{error}"
-  
+
   parseOptions: (exp) ->
     optionsExp = exp.match /[\{\s=].*/i
     if optionsExp
@@ -81,7 +81,7 @@ module.exports = class Haml extends Node
       assignment: assignment
       pairs     : pairs || []
     )
-    
+
   parseAttributes: (attributesExp) ->
     pairs = []
     return pairs unless attributesExp?
@@ -92,7 +92,7 @@ module.exports = class Haml extends Node
       result = key.match(/^'(.+)'$/)
       key    = result[1] if result
       value  = pair[1].trim()
-      valueIsLiteral = value.match(/("|')/)
+      valueIsLiteral = value.match(/^("|').*\1$/)
       pairs.push
         key: key
         value: if valueIsLiteral then value else '"#{' + value + '}"'
@@ -100,4 +100,4 @@ module.exports = class Haml extends Node
 
   isSelfClosing: (tag) ->
     Haml.selfCloseTags.indexOf(tag) == -1
-  
+

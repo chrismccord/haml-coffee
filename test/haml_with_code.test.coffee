@@ -62,6 +62,30 @@ module.exports =
 
     return
 
+  'Test haml with code variable "category" as attribute': ->
+    haml = new Haml("%a{ :class => category }", 0, 0, true)
+
+    haml.getOpener().should.eql('o.push "<a class=\\"#{category}\\">"')
+    haml.getCloser().should.eql('o.push "</a>"')
+
+    return
+
+  'Test haml with code function "category()" as attribute': ->
+    haml = new Haml("%a{ :class => category() }", 0, 0, true)
+
+    haml.getOpener().should.eql('o.push "<a class=\\"#{category()}\\">"')
+    haml.getCloser().should.eql('o.push "</a>"')
+
+    return
+
+  'Test haml with code function "product.get(\'category\')" as attribute': ->
+    haml = new Haml("%a{ :class => product.get('category') }", 0, 0, true)
+
+    haml.getOpener().should.eql('o.push "<a class=\\"#{product.get(\'category\')}\\">"')
+    haml.getCloser().should.eql('o.push "</a>"')
+
+    return
+
   'Test code with html escaping': ->
     code = new Code('= "abc"', 0, 0, true)
 
